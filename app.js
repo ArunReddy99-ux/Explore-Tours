@@ -40,47 +40,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 //Set Security HTTP headers
 app.use(helmet());
-// app.use(
-//   cors({
-//     origin: 'http://localhost:3000',
-//     credentials: true,
-//   }),
-// );
-
-// Set Security HTTP headers
-// app.use(helmet()) -> This is old helmet declartion.
-
 app.use(
-  // helmet.contentSecurityPolicy({
-  //   directives: {
-  //     defaultSrc: ["'self'", 'https:', 'http:', 'data:', 'ws:'],
-  //     baseUri: ["'self'"],
-  //     fontSrc: ["'self'", 'https:', 'http:', 'data:'],
-  //     scriptSrc: ["'self'", 'https:', 'http:', 'blob:'],
-  //     styleSrc: ["'self'", "'unsafe-inline'", 'https:', 'http:'],
-  //   },
-  // }),
-  // helmet.contentSecurityPolicy({
-  //   directives: {
-  //     defaultSrc: ["'self'", 'http://127.0.0.1:3000/*'],
-  //     connectSrc: ["'self'", "ws://127.0.0.1:*"], // Allow WebSocket connections on any port for 127.0.0.1
-  //     baseUri: ["'self'"],
-  //     fontSrc: ["'self'", 'https:', 'data:'],
-  //     scriptSrc: [
-  //       "'self'",
-  //       'https://*.stripe.com',
-  //       'https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js',
-  //     ],
-
-  //     // eslint-disable-next-line no-dupe-keys
-  //     scriptSrc: ["'self'", 'https://*.cloudflare.com'],
-
-  //     frameSrc: ["'self'", 'https://*.stripe.com'],
-  //     objectSrc: ["'none'"],
-  //     styleSrc: ["'self'", 'https:', 'unsafe-inline'],
-  //     upgradeInsecureRequests: [],
-  //   },
-  // }),
   helmet.contentSecurityPolicy({
     directives: {
       defaultSrc: ["'self'", 'http://127.0.0.1:3000'], // No need for /* after a URL
