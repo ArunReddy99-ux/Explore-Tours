@@ -1,0 +1,108 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+const multer = require('multer');
+// eslint-disable-next-line import/no-extraneous-dependencies
+const sharp = require('sharp');
+const User = require('../models/userModel');
+const catchAsync = require('../utils/catchAsync');
+
+const AppError = require('../utils/appError');
+
+const factory = require('./handlerFactory');
+
+// const multerStorage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, 'public/img/users');
+//   },
+//   filename: (req, file, cb) => {
+//     // user-767676abc76dba-332376764.jpeg
+//     const ext = file.mimetype.split('/')[1];
+//     cb(null, `user-${req.user.id}-${Date.now()}.${ext}`);
+//   },
+// });
+//This way the image will be stored as a buffer,that buffer will be available at req.file.buffer
+const multerStorage = multer.memoryStorage();
+
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true);
+  } else {
+    cb(new AppError('Not an image ! Please upload only images', 400), false);
+  }
+};
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
+});
+
+exports.uploadUserPhoto = upload.single('photo');
+
+exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
+  if (!req.file) return next();
+
+  req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
+  //this will crop the image into given width and breadth
+  await sharp(req.file.buffer)
+    .resize(500, 500)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/users/${req.file.filename}`);
+  next();
+});
+const filterObj = (obj, ...allowedFields) => {
+  const newobj = {};
+  Object.keys(obj).forEach((el) => {
+    if (allowedFields.includes(el)) newobj[el] = obj[el];
+  });
+  return newobj;
+};
+exports.getMe = (req, res, next) => {
+  req.params.id = req.user.id;
+  next();
+};
+exports.deleteMe = catchAsync(async (req, res, next) => {
+  await User.findByIdAndUpdate(req.user.id, { active: false });
+  res.status(204).json({
+    status: 'success',
+    data: null,
+  });
+});
+exports.updateMe = catchAsync(async (req, res, next) => {
+  console.log('the info is ');
+  console.log(req.file);
+  console.log(req.body);
+
+  //1}create error if the user posts a password data
+  if (req.body.password || req.body.passwordConfirm)
+    return next(
+      new AppError(
+        'This route not for password updation .please use /updateMyPassword',
+        400,
+      ),
+    );
+  //2)update the user data
+  const filteredBody = filterObj(req.body, 'name', 'email');
+  //adding photo property to the object that wuld be updated in the filterBody
+  if (req.file) filteredBody.photo = req.file.filename;
+  const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
+    new: true,
+    runValidators: true,
+  });
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user: updatedUser,
+    },
+  });
+});
+exports.createUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'This route is  not  defined/Please signup',
+  });
+};
+//DO NOT UPDATE PASSORDS WIT THIS
+exports.getAllUsers = factory.getAll(User);
+exports.getUser = factory.getOne(User);
+exports.updateUser = factory.updateOne(User);
+exports.deleteUser = factory.deleteOne(User);
