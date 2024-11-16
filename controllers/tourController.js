@@ -34,7 +34,7 @@ exports.uploadTourImages = upload.fields([
 exports.resizeTourImages = catchAsync(async (req, res, next) => {
   if (!req.files.imageCover || !req.files.images) return next();
   //1)Cover image
-  console.log(req.files);
+  // console.log(req.files);
   req.body.imageCover = `tour-${req.params.id}-${Date.now()}-cover.jpeg`;
   await sharp(req.files.imageCover[0].buffer)
     .resize(2000, 1333)
@@ -189,7 +189,7 @@ exports.getToursWithin = catchAsync(async (req, res, next) => {
         404,
       ),
     );
-  console.log(distance, lat, lng, unit);
+
   //geospatial operator like geoWithin finds documensts within a certain geometry and that geometry we have to define we want to documents inside of a sphere of lat and lng of radius of provided distance that we defined
   const tours = await Tour.find({
     startLocation: { $geoWithin: { $centerSphere: [[lng, lat], radius] } },

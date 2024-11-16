@@ -68,10 +68,6 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   });
 });
 exports.updateMe = catchAsync(async (req, res, next) => {
-  console.log('the info is ');
-  console.log(req.file);
-  console.log(req.body);
-
   //1}create error if the user posts a password data
   if (req.body.password || req.body.passwordConfirm)
     return next(
