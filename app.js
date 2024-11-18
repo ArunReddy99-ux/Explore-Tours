@@ -23,6 +23,8 @@ const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const compression = require('compression');
+// eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies
+const cors = require('cors');
 
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
@@ -38,7 +40,8 @@ const app = express();
 app.set('view engine', 'pug');
 
 app.set('views', path.join(__dirname, 'views'));
-
+app.use(cors());
+app.options('*', cors());
 //1)Global Middlewares
 app.use(express.static(path.join(__dirname, 'public')));
 //Set Security HTTP headers
