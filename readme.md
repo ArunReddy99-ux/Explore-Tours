@@ -18,7 +18,7 @@ This project features RESTful APIs, authentication, authorization, Stripe paymen
 -----------
 ## Project Structure
  
-#### Natours--alongwithBackend/
+ Natours--alongwithBackend/
 │
 ├── controllers/         # Route controllers (business logic)   
 ├── models/              # Mongoose models  
