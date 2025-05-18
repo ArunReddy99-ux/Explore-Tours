@@ -20,16 +20,16 @@ This project features RESTful APIs, authentication, authorization, Stripe paymen
  
 Natours--alongwithBackend/
 │
-├── controllers/         # Route controllers (business logic)
-├── models/              # Mongoose models
-├── public/              # Static assets (JS, CSS, images)
-├── routes/              # Express route definitions
-├── utils/               # Utility modules
-├── views/               # Pug templates for server-rendered pages
-├── app.js               # Express app setup
-├── server.js            # App entry point
-├── config.env           # Environment variables
-└── readme.md            # Project documentation
+├── controllers/         # Route controllers (business logic)   
+├── models/              # Mongoose models  
+├── public/              # Static assets (JS, CSS, images)  
+├── routes/              # Express route definitions   
+├── utils/               # Utility modules  
+├── views/               # Pug templates for server-rendered pages  
+├── app.js               # Express app setup  
+├── server.js            # App entry point  
+├── config.env           # Environment variables  
+└── readme.md            # Project documentation  
 -------------
 ## API Reference
 
@@ -47,14 +47,14 @@ Natours--alongwithBackend/
  **Example:**
 http
 GET /api/v1/tours
-**Response:**
+**Response:**  
 json
 {
   "status": "success",
-  "results": 2,
+  "results": 2,  
   "data": {
-    "tours": [
-      { "_id": "...", "name": "The Forest Hiker",...},
+    "tours": [  
+      { "_id": "...", "name": "The Forest Hiker",...},  
       { "_id": "...", "name": "The Sea Explorer", ... }
     ]
   }
@@ -106,7 +106,7 @@ json
 
 **Example:**
 http
-POST /api/v1/tours/5c88fa8cf4afda39709c2955/reviews
+POST /api/v1/tours/5c88fa8cf4afda39709c2955/reviews   
 Content-Type: application/json
 
 {
@@ -172,33 +172,33 @@ Content-Type: application/json
    Express receives the request and matches the URL to a route in "app.js":
    js
    app.use('/', viewRouter);
-   app.use('/api/v1/tours', tourRouter);
-   app.use('/api/v1/users', userRouter);
+   app.use('/api/v1/tours', tourRouter); 
+   app.use('/api/v1/users', userRouter);  
    app.use('/api/v1/reviews', reviewRouter);
    app.use('/api/v1/bookings', bookingRouter);
    Each router handles a specific resource and delegates to the appropriate controller.
 
-3. **Middleware:**  
+4. **Middleware:**  
    Before reaching the controller, requests pass through global middleware for:
    - Security (Helmet, rate limiting, sanitization)
    - Parsing JSON and cookies
    - Logging and compression
 
-4. **Controller Logic:**  
+6. **Controller Logic:**  
    The controller processes the request:
    - Validates and sanitizes input
    - Interacts with the database via Mongoose models
    - Handles authentication and authorization (if needed)
    - Returns a JSON response (for API) or renders a Pug view (for frontend)
 
-5. **Database Interaction:**  
+7. **Database Interaction:**  
    Controllers use Mongoose models to query or update MongoDB.  
    Example:  
    js
    const tours = await Tour.find();
    
 
-6. **Response:**  
+8. **Response:**  
    - For API routes: Sends a JSON response with status, data, and messages.
    - For view routes: Renders a Pug template with dynamic data.
 
